@@ -13,7 +13,7 @@ def get_instances(ents, instances = [])
   instances
 end
 
-def dims()
+def dims(filter="")
   mod = Sketchup.active_model
   sel = mod.selection
   if sel.empty?
@@ -31,6 +31,7 @@ def dims()
   ents.each{|ent|
     defn = ent.definition
     name = defn.name
+	next unless name.include?(filter)
     bbox = defn.bounds
     w = bbox.width.to_l.to_s
     h = bbox.height.to_l.to_s
