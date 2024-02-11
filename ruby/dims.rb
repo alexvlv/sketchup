@@ -1,3 +1,4 @@
+#  $Id$
 def get_instances(ents, instances = [])
   ents.each{|e|
     case e
