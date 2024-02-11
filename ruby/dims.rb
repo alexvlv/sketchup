@@ -4,8 +4,10 @@ def get_instances(ents, instances = [])
     when Sketchup::Group
       get_instances(e.entities, instances)
     when Sketchup::ComponentInstance
-      instances<<e
-      get_instances(e.definition.entities, instances)
+	  inst=[]
+      get_instances(e.definition.entities, inst)
+	  instances<<e if inst == []
+	  instances.push(*inst)
     end
   }
   instances
