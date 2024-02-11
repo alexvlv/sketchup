@@ -1,19 +1,45 @@
-def replacer (old,new="")
-  mod = Sketchup.active_model
-  sel = mod.selection
-  if sel.empty?
-    defins = mod.definitions
-  else
-    defins = sel.grep(Sketchup::ComponentInstance).map(&:definition).uniq
-    return "No component selected" if defins == []
+###
+###  $Id$
+###
+
+def get_instances(ents, instances = [])
+  ents.each{|e|
+    case e
+    when Sketchup::Group
+      get_instances(e.entities, instances)
+    when Sketchup::ComponentInstance
+	  inst=[]
+      get_instances(e.definition.entities, inst)
+	  instances<<e if inst == []
+	  instances.push(*inst)
+    end
+  }
+  instances
+end
+
+def replacer(old,new="",filter="")
+  old=old.to_s
+  new=new.to_s
+  model=Sketchup.active_model
+  entities=model.selection
+  sz = entities.size.to_s
+  puts "Entities:" + sz
+  ents = get_instances(entities)
+  if ents.empty?
+    return "No component selected"
   end
-  mod.start_operation("Change definition names", true)
+  model.start_operation("Change definition names", true)
   i = 0
-  defins.each{|defin|
-    next unless defin.name.include?(old)
-    defin.name = defin.name.sub(old,new)
+  ents.each{|ent|
+    defn = ent.definition
+    name = defn.name
+	next unless name.include?(filter)
+	next unless name.include?(old)
+    newname = name.sub(old,new)
+    puts name + " => " + newname
+	defn.name = newname
     i += 1
   }
-  mod.commit_operation
-  "#{i} changes"
-end
+  model.commit_operation
+  "Processed #{i} component definitions"
+end#def
