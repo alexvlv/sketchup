@@ -14,9 +14,10 @@ def get_instances(ents, instances = [])
   instances
 end
 
-def dims(filter="")
+def dims(filter="", select=FALSE)
   mod = Sketchup.active_model
   sel = mod.selection
+  #mod.selection.clear 
   if sel.empty?
     entities = mod.active_entities
   else
@@ -29,6 +30,7 @@ def dims(filter="")
     return "No component selected"
   end
   i = 0
+  founds = []
   ents.each{|ent|
     defn = ent.definition
     name = defn.name
@@ -39,6 +41,11 @@ def dims(filter="")
     d = bbox.depth.to_l.to_s
     puts name + " " + w + " " + h + " " + d
     i += 1
+	founds << ent
   }
+  if select
+    mod.selection.clear
+	founds.each{|ent| mod.selection.add(ent)}
+  end
   "#{i} found"
 end
