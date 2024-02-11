@@ -1,0 +1,27 @@
+# Общие настройки, которые всегда должны быть использованы для настроек вашего языка.
+# Автоматическое определение текстовых файлов и выполнение нормализации LF 
+# http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+* text=auto
+
+#
+# Строка выше будет обрабатывать все файлы, которых нет в списке ниже.
+#
+
+*.md text
+*.tex text
+*.adoc text
+*.textile text
+*.mustache text
+*.csv text
+*.tab text
+*.tsv text
+*.sql text
+
+*.rb text
+*.rb ident
+*.rb encoding=utf-8
+*.rb export-subst
+
+
+
+
