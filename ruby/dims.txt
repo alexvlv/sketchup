@@ -1,0 +1,36 @@
+# this lists component name and bounding box dimensions
+
+model = Sketchup.active_model
+entities = model.entities
+entities.each { |entity|
+  if entity.class == Sketchup::ComponentInstance
+    name = entity.definition.name
+    defn = entity.definition
+    bbox = defn.bounds
+    w = bbox.width.to_l.to_s
+    h = bbox.height.to_l.to_s
+    d = bbox.depth.to_l.to_s
+    puts name + " " + w + " " + h + " " + d
+  end
+}
+
+https://sketchucation.com/forums/viewtopic.php?f=289&t=63969
+
+
+def get_instances(ents, instances = [])
+  ents.each{|e|
+    case e
+    when Sketchup::Group
+      get_instances(e.entities, instances)
+    when Sketchup::ComponentInstance
+      instances<<e
+      get_instances(e.definition.entities, instances)
+    end
+  }
+  instances
+end
+
+model = Sketchup.active_model
+entities = model.active_entities
+all_instances_count = get_instances(entities).size
+https://forums.sketchup.com/t/how-can-i-get-count-of-components-in-my-file-skp-in-ruby-api/188588/4
