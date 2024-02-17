@@ -20,7 +20,7 @@ def rendims(prefix="",suffix="",filter="")
   prefix=prefix.to_s
   suffix=suffix.to_s
   model=Sketchup.active_model
-  model.start_operation("banding +"+prefix+"/"+suffix)
+  model.start_operation("rendims +"+prefix+"/"+suffix)
   entities=model.selection
   sz = entities.size.to_s
   puts "Entities:" + sz
